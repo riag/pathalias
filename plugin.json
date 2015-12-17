@@ -1,0 +1,12 @@
+{
+    "ID":"35d5a0e3cc34479a895731e764dc28de",
+    "ActionKeyword":"pa",
+    "Name":"pathalias",
+    "Description":"open folder path quickly",
+    "Author":"riag",
+    "Version":"1.0.0",
+    "Language":"python",
+    "Website":"https://github.com/riag/pathalias",
+    "ExecuteFileName":"main.py",
+    "IcoPath": "img/folder.png"
+}

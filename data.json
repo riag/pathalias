@@ -1,0 +1,6 @@
+{
+	"~": "$USERPROFILE",
+	"home": "$USERPROFILE",
+	"sys32": "${windir}\\System32",
+	"programfiles": "$ProgramFiles"
+}
