@@ -1,4 +1,5 @@
 {
+	"woxhome": "${WOX_HOME}",
 	"~": "$USERPROFILE",
 	"home": "$USERPROFILE",
 	"sys32": "${windir}\\System32",

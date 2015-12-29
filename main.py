@@ -6,6 +6,12 @@ import os,sys
 import subprocess
 from wox import Wox
 
+current_dir = os.path.dirname(__file__)
+plugin_home = os.path.dirname(current_dir)
+wox_home = os.path.dirname(plugin_home)
+
+os.environ['WOX_HOME'] = wox_home
+
 class PathAlias(Wox):
 	IMAGE_PATH = 'img/folder.png'
 	ACTION_KEYWORD = 'pathmgr'
@@ -38,7 +44,7 @@ class PathAlias(Wox):
 		self.open_folder_cmd = 'explorer %s'
 		self.data_path = ''
 
-		with open(os.path.join(os.path.dirname(__file__),"config.json"), "r") as content_file:
+		with open(os.path.join(current_dir,"config.json"), "r") as content_file:
 			config = json.loads(content_file.read())
 			v = config.get('data_path', self.data_path)
 			if v: self.data_path = v
@@ -53,7 +59,7 @@ class PathAlias(Wox):
 		return new_m
 
 	def load_data(self):
-		path = os.path.join(os.path.dirname(__file__), "data.json")
+		path = os.path.join(current_dir, "data.json")
 
 		if os.path.lexists(path):
 			with open(path, "r") as content_file:
