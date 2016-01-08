@@ -14,7 +14,7 @@ os.environ['WOX_HOME'] = wox_home
 
 class PathAlias(Wox):
 	IMAGE_PATH = 'img/folder.png'
-	ACTION_KEYWORD = 'pathmgr'
+	ACTION_KEYWORD = 'pa'
 	SEPERATER = ' '
 
 	def make_command_usage(self, results, cmd, title, subtitle):
@@ -37,6 +37,7 @@ class PathAlias(Wox):
 	def usage_results(self):
 	    results = []
 	    self.make_command_usage(results, 'open', 'open <path alias name>', 'open folder quickey')
+	    self.make_command_usage(results, 'editconfig', 'editconfig', 'open user config file')
 	    return results
 
     	def load_config(self):
@@ -90,12 +91,41 @@ class PathAlias(Wox):
 				'IcoPath':self.IMAGE_PATH,
 				"JsonRPCAction":{
 				  "method": "open_folder",
-				  "parameters":[path.replace("\\", "\\\\"),],
+				  "parameters":[path,],
 				}
 			}
 			results.append(m)
 
 		return results
+
+	def editconfig_command(self, key_list):
+		results = []
+
+		if not self.data_path or not os.path.isfile(self.data_path):
+			m = 	{
+					'Title': "没有定义用户配置文件",
+					"JsonRPCAction":{
+					  "method": "Wox.ShowApp",
+					  "parameters":[],
+					  "dontHideAfterAction":True
+					}
+				}
+			results.append(m)
+			return results
+
+		path = self.data_path
+		m = 	{
+				'Title': "打开用户配置文件",
+				'SubTitle': '用户配置文件: %s' % path,
+				"JsonRPCAction":{
+				  "method": "open_userconfig",
+				  #"parameters":[path.replace("\\", "\\\\"),],
+				  "parameters":[path,],
+				}
+			}
+		results.append(m)
+		return results
+
 
 	def query(self, key):
 		if not key:
@@ -107,17 +137,32 @@ class PathAlias(Wox):
 		cmd = key_list[0]
 
 		self.load_config()
-		self.load_data()
 
 		if cmd == 'open':
+			self.load_data()
 			return self.open_command(key_list)
+		elif cmd == 'editconfig':
+			return self.editconfig_command(key_list)
 		
 		return [] 
 
+	def open_userconfig(self, path):
+		self.load_config()
+		
+		p = path.replace("/", "\\")
+		p = p.replace("\\\\", "\\")
+
+		cmd = "%s" % p
+		#self.debug(cmd)
+		subprocess.call(cmd, shell=True)
+
+
 	def open_folder(self, path):
 		self.load_config()
-		path = path.replace("/", "\\")
-		p = path.encode('gb2312')
+
+		p = path.replace("/", "\\")
+		p = p.replace("\\\\", "\\")
+
 		cmd = self.open_folder_cmd % p
 		#self.debug(cmd)
 		subprocess.call(cmd, shell=True)
